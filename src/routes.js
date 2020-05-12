@@ -2,10 +2,11 @@ const express = require('express');
 const EntidadeController = require('./controllers/EntidadeController');
 const EventosController = require('./controllers/EventoController');
 const DoacaoController = require('./controllers/DoacaoController');
+const ValidEntidade = require('./validations/validEntidades');
 
 const routes = express.Router();
 
-routes.get('/entidades', EntidadeController.listarOrganizacoes);
+routes.get('/entidades',ValidEntidade.validGetEntidades(),EntidadeController.listarOrganizacoes);
 routes.get('/entidades/:id', EntidadeController.listarOrganizacao);
 routes.put('/entidades/:id', EntidadeController.alterar);
 routes.post('/entidades', EntidadeController.cadastrar);

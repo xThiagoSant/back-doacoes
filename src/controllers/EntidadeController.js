@@ -6,23 +6,33 @@ module.exports = {
         const {
             offset = 1, 
             limit = 10,
-            organizador = 'S',
-            doador = 'N' 
+            organizador = '',
+            doador = '' 
         } = req.query;
 
         const [totalReg] = await connection('entidades').count();
         res.header('X-Total-reg', totalReg['count(*)']);
 
-        const entidades = await connection('entidades')
-        .limit(limit)
-        .offset((offset - 1 )* limit)
-        .where({
-            organizador:organizador,
-            doador:doador
-        })
-        .select('*');       
-
-        return res.json(entidades);
+        if(String(organizador).length == 0 || String(doador).length == 0){
+            const entidades = await connection('entidades')
+            .limit(limit)
+            .offset((offset - 1 )* limit)
+            .select('*');   
+            
+            return res.json(entidades);
+        }
+        else{
+            const entidades = await connection('entidades')
+            .limit(limit)
+            .offset((offset - 1 )* limit)
+            .where({
+                organizador:organizador,
+                doador:doador
+            })
+            .select('*');      
+            
+            return res.json(entidades);
+        }
     },
     async listarOrganizacao(req, res){
         const { id } = req.params;
